@@ -1,0 +1,55 @@
+plugins {
+    id "groovy"
+    id "com.github.johnrengelman.shadow" version "2.0.1"
+    id "io.spring.dependency-management" version '1.0.6.RELEASE'
+    id "application"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.micronaut:micronaut-bom:$micronautVersion"
+    }
+}
+
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly
+}
+
+dependencies {
+    compileOnly "io.micronaut:micronaut-inject-groovy"
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-http-server-netty"
+    implementation "io.micronaut:micronaut-runtime-groovy"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut.configuration:micronaut-hibernate-gorm"
+
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    testImplementation("org.spockframework:spock-core") {
+        exclude group: "org.codehaus.groovy", module: "groovy-all"
+    }
+    testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "io.micronaut.test:micronaut-test-spock"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+
+    implementation "com.h2database:h2"
+    implementation "org.apache.tomcat:tomcat-jdbc"
+
+    implementation project(':gorm-shared-domains')
+}
+
+test.classpath += configurations.developmentOnly
+
+mainClassName = "gorm.shared.domains.micornaut.Application"
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+}
+tasks.withType(GroovyCompile) {
+    groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+}

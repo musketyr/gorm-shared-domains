@@ -1,0 +1,27 @@
+
+sourceSets {
+    main {
+        groovy {
+            // the source folder for the GORM domain classes
+            srcDir 'grails-app/domain'
+            // if you also want to include some services
+            srcDir 'grails-app/services'
+        }
+    }
+}
+
+dependencies {
+    // GORM
+    compile "org.grails:grails-datastore-gorm-hibernate5:$gormVersion"
+
+    // required for Grails Plugin generation
+    compileOnly "org.grails:grails-core:$grailsVersion"
+
+    // required for Micronaut service generation
+    compileOnly "io.micronaut:micronaut-inject-groovy:$micronautVersion"
+
+    // required for jackson ignores generation
+    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.8.11.3'
+
+    testCompile "org.spockframework:spock-core:1.3-groovy-2.5"
+}

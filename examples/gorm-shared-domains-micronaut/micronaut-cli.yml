@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: gorm.shared.domains.micornaut
+---
+testFramework: spock
+sourceLanguage: groovy

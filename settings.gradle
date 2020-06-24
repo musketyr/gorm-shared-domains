@@ -1,0 +1,9 @@
+rootProject.name = 'gorm-shared-domains-root'
+
+include ':gorm-shared-domains'
+include ':gorm-shared-domains-grails'
+include ':gorm-shared-domains-micronaut'
+
+project(':gorm-shared-domains').projectDir = file('libs/gorm-shared-domains')
+project(':gorm-shared-domains-grails').projectDir = file('examples/gorm-shared-domains-grails')
+project(':gorm-shared-domains-micronaut').projectDir = file('examples/gorm-shared-domains-micronaut')

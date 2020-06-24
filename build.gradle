@@ -1,0 +1,41 @@
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url  "https://dl.bintray.com/agorapulse/libs" }
+        maven { url "https://repo.spring.io/release"  }
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+}
+
+subprojects { subproject ->
+    apply plugin: 'groovy'
+
+    dependencies {
+        // add your global dependencies
+    }
+
+    // useful for Micronaut
+    tasks.withType(GroovyCompile) {
+        groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+    }
+
+    // useful for Micronaut
+    tasks.withType(JavaCompile){
+        options.encoding = "UTF-8"
+        options.compilerArgs.add('-parameters')
+    }
+
+    // location independent tests (useful for stable CI builds)
+    tasks.withType(Test){
+        systemProperty 'user.timezone', 'UTC'
+        systemProperty 'user.language', 'en'
+    }
+
+    // useful for IntelliJ
+    task cleanOut(type: Delete) {
+        delete file('out')
+    }
+
+    clean.dependsOn cleanOut
+}
